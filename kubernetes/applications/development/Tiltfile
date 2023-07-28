@@ -1,10 +1,13 @@
 # Main Tiltfile to bootstraping all services
 
 include('../../../../config-service/Tiltfile')
+include('../../../../edge-service/Tiltfile')
 include('../../../../catalog-service/Tiltfile')
 include('../../../../order-service/Tiltfile')
 
 k8s_yaml(['../../platform/development/services/postgresql.yml'])
+k8s_yaml(['../../platform/development/services/redis.yml'])
 
+k8s_resource('edge-service', resource_deps=['config-service', 'polar-redis'])
 k8s_resource('catalog-service', resource_deps=['config-service', 'polar-postgres'])
 k8s_resource('order-service', resource_deps=['config-service', 'polar-postgres'])
